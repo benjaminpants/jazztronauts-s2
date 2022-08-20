@@ -103,6 +103,11 @@
       ]
     },
     "ProjectTemplate": null,
-    "GameCategory": "None"
+    "GameCategory": "None",
+    "Compiler": {
+      "RootNamespace": "Jazztronauts",
+      "DefineConstants": "JAZZTRONAUTS;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;"
+    }
   }
 }
