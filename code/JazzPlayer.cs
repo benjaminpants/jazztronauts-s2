@@ -91,9 +91,40 @@ internal partial class JazzPlayer : Player
 		return null;
 	}
 
+	public void SimulateAnimation(PawnController controller)
+	{
+		if (controller == null)
+			return;
+
+		CitizenAnimationHelper animHelper = new CitizenAnimationHelper(this);
+
+		if (ActiveChild is BaseCarriable carry)
+		{
+			carry.SimulateAnimator(animHelper);
+		}
+		else
+		{
+			animHelper.HoldType = CitizenAnimationHelper.HoldTypes.None;
+			animHelper.AimBodyWeight = 0.5f;
+		}
+	}
+
 	public override void Simulate(Client cl)
 	{
 		base.Simulate(cl);
+
+		if (LifeState != LifeState.Alive)
+			return;
+
+		var controller = GetActiveController();
+		if (controller != null)
+		{
+			EnableSolidCollisions = !controller.HasTag("noclip");
+
+			SimulateAnimation(controller);
+		}
+
+		TickPlayerUse();
 
 		SimulateActiveChild(cl, Inventory.Active);
 

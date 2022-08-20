@@ -25,9 +25,9 @@ public partial class PropSnatcher : Weapon
 
 	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.HoldType = CitizenAnimationHelper.HoldTypes.Swing;
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.HoldItem;
 		anim.Handedness = CitizenAnimationHelper.Hand.Right;
-		anim.AimBodyWeight = 1.0f;
+		anim.AimBodyWeight = 0.5f;
 	}
 
 	public override void AttackPrimary()
