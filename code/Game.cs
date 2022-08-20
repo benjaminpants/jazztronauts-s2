@@ -1,4 +1,6 @@
-﻿using Sandbox;
+﻿using Jazztronauts.UI;
+using Sandbox;
+using Sandbox.UI;
 
 namespace Jazztronauts;
 
@@ -11,6 +13,15 @@ namespace Jazztronauts;
 /// </summary>
 public class Jazztronauts : Game
 {
+	private MainHUD _mainHud;
+
+	public Jazztronauts()
+	{
+		if (!IsClient) return;
+
+		_mainHud = new MainHUD();
+	}
+
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
@@ -24,5 +35,14 @@ public class Jazztronauts : Game
 		player.Respawn();
 
 		client.Pawn = player;
+	}
+
+	[Event.Hotload]
+	public void HotloadUpdate()
+	{
+		if (!IsClient) return;
+
+		_mainHud?.Delete();
+		_mainHud = new MainHUD();
 	}
 }
