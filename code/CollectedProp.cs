@@ -1,20 +1,16 @@
 ﻿using Sandbox;
 
-
 namespace Jazztronauts;
-
 
 public class CollectedProp : Prop
 {
-
 	public float DestroyTimer = 5f;
 
 	public CollectedProp()
 	{
-		
 	}
 
-	public CollectedProp( ModelEntity tocopy ) : this()
+	public CollectedProp(ModelEntity tocopy) : this()
 	{
 		Model = tocopy.Model;
 		Position = tocopy.Position;
@@ -33,7 +29,7 @@ public class CollectedProp : Prop
 	{
 		Velocity *= 0.98f;
 		DestroyTimer -= Time.Delta;
-		if ( LocalScale > 0.5f)
+		if (LocalScale > 0.5f)
 		{
 			LocalScale *= 0.99f;
 		}
@@ -42,7 +38,4 @@ public class CollectedProp : Prop
 			Delete();
 		}
 	}
-
-
 }
-

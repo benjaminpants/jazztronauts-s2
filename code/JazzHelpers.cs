@@ -6,7 +6,7 @@ public static class JazzHelpers
 {
 	public static bool CheckIfEntityIsValidStealable(Entity ent)
 	{
-		if ( ent.IsValid() )
+		if (ent.IsValid())
 		{
 			return ent.ClassName != "worldent" && ent.ClassName != "JazzPlayer";
 		}
@@ -15,9 +15,7 @@ public static class JazzHelpers
 
 	public static int CalculateModelWorth(Model mdl)
 	{
-		int base_value = ((int)mdl.Bounds.Size.Length / 5) + 1;
-		return base_value;
+		int baseValue = (int)mdl.Bounds.Size.Length / 5 + 1;
+		return baseValue;
 	}
-	
-	
 }

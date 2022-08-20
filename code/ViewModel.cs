@@ -1,4 +1,7 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
+
+namespace Jazztronauts;
 
 public class ViewModel : BaseViewModel
 {
@@ -6,117 +9,117 @@ public class ViewModel : BaseViewModel
 	protected float ReturnSpeed => 5.0f;
 	protected float MaxOffsetLength => 10.0f;
 	protected float BobCycleTime => 7;
-	protected Vector3 BobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
+	protected Vector3 BobDirection => new(0.0f, 1.0f, 0.5f);
 
-	private Vector3 swingOffset;
-	private float lastPitch;
-	private float lastYaw;
-	private float bobAnim;
+	private Vector3 _swingOffset;
+	private float _lastPitch;
+	private float _lastYaw;
+	private float _bobAnim;
 
-	private bool activated = false;
+	private bool _activated;
 
 	public bool EnableSwingAndBob = true;
 
 	public float YawInertia { get; private set; }
 	public float PitchInertia { get; private set; }
 
-	public override void PostCameraSetup( ref CameraSetup camSetup )
+	public override void PostCameraSetup(ref CameraSetup camSetup)
 	{
-		base.PostCameraSetup( ref camSetup );
+		base.PostCameraSetup(ref camSetup);
 
-		if ( !Local.Pawn.IsValid() )
+		if (!Local.Pawn.IsValid())
 			return;
 
-		if ( !activated )
+		if (!_activated)
 		{
-			lastPitch = camSetup.Rotation.Pitch();
-			lastYaw = camSetup.Rotation.Yaw();
+			_lastPitch = camSetup.Rotation.Pitch();
+			_lastYaw = camSetup.Rotation.Yaw();
 
 			YawInertia = 0;
 			PitchInertia = 0;
 
-			activated = true;
+			_activated = true;
 		}
 
 		Position = camSetup.Position;
 		Rotation = camSetup.Rotation;
 
-		var cameraBoneIndex = GetBoneIndex( "camera" );
-		if ( cameraBoneIndex != -1 )
+		int cameraBoneIndex = GetBoneIndex("camera");
+		if (cameraBoneIndex != -1)
 		{
-			camSetup.Rotation *= (Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation);
+			camSetup.Rotation *= Rotation.Inverse * GetBoneTransform(cameraBoneIndex).Rotation;
 		}
 
-		var newPitch = Rotation.Pitch();
-		var newYaw = Rotation.Yaw();
+		float newPitch = Rotation.Pitch();
+		float newYaw = Rotation.Yaw();
 
-		PitchInertia = Angles.NormalizeAngle( newPitch - lastPitch );
-		YawInertia = Angles.NormalizeAngle( lastYaw - newYaw );
+		PitchInertia = Angles.NormalizeAngle(newPitch - _lastPitch);
+		YawInertia = Angles.NormalizeAngle(_lastYaw - newYaw);
 
-		if ( EnableSwingAndBob )
+		if (EnableSwingAndBob)
 		{
-			var playerVelocity = Local.Pawn.Velocity;
+			Vector3 playerVelocity = Local.Pawn.Velocity;
 
-			if ( Local.Pawn is Player player )
+			if (Local.Pawn is Player player)
 			{
-				var controller = player.GetActiveController();
-				if ( controller != null && controller.HasTag( "noclip" ) )
+				PawnController controller = player.GetActiveController();
+				if (controller != null && controller.HasTag("noclip"))
 				{
 					playerVelocity = Vector3.Zero;
 				}
 			}
 
-			var verticalDelta = playerVelocity.z * Time.Delta;
-			var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
-			verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y ));
-			var pitchDelta = PitchInertia - verticalDelta * 1;
-			var yawDelta = YawInertia;
+			float verticalDelta = playerVelocity.z * Time.Delta;
+			Vector3 viewDown = Rotation.FromPitch(newPitch).Up * -1.0f;
+			verticalDelta *= 1.0f - MathF.Abs(viewDown.Cross(Vector3.Down).y);
+			float pitchDelta = PitchInertia - verticalDelta * 1;
+			float yawDelta = YawInertia;
 
-			var offset = CalcSwingOffset( pitchDelta, yawDelta );
-			offset += CalcBobbingOffset( playerVelocity );
+			Vector3 offset = CalcSwingOffset(pitchDelta, yawDelta);
+			offset += CalcBobbingOffset(playerVelocity);
 
 			Position += Rotation * offset;
 		}
 		else
 		{
-			SetAnimParameter( "aim_yaw_inertia", YawInertia );
-			SetAnimParameter( "aim_pitch_inertia", PitchInertia );
+			SetAnimParameter("aim_yaw_inertia", YawInertia);
+			SetAnimParameter("aim_pitch_inertia", PitchInertia);
 		}
 
-		lastPitch = newPitch;
-		lastYaw = newYaw;
+		_lastPitch = newPitch;
+		_lastYaw = newYaw;
 	}
 
-	protected Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
+	protected Vector3 CalcSwingOffset(float pitchDelta, float yawDelta)
 	{
-		Vector3 swingVelocity = new Vector3( 0, yawDelta, pitchDelta );
+		Vector3 swingVelocity = new(0, yawDelta, pitchDelta);
 
-		swingOffset -= swingOffset * ReturnSpeed * Time.Delta;
-		swingOffset += (swingVelocity * SwingInfluence);
+		_swingOffset -= _swingOffset * ReturnSpeed * Time.Delta;
+		_swingOffset += swingVelocity * SwingInfluence;
 
-		if ( swingOffset.Length > MaxOffsetLength )
+		if (_swingOffset.Length > MaxOffsetLength)
 		{
-			swingOffset = swingOffset.Normal * MaxOffsetLength;
+			_swingOffset = _swingOffset.Normal * MaxOffsetLength;
 		}
 
-		return swingOffset;
+		return _swingOffset;
 	}
 
-	protected Vector3 CalcBobbingOffset( Vector3 velocity )
+	protected Vector3 CalcBobbingOffset(Vector3 velocity)
 	{
-		bobAnim += Time.Delta * BobCycleTime;
+		_bobAnim += Time.Delta * BobCycleTime;
 
-		var twoPI = System.MathF.PI * 2.0f;
+		const float twoPi = MathF.PI * 2.0f;
 
-		if ( bobAnim > twoPI )
+		if (_bobAnim > twoPi)
 		{
-			bobAnim -= twoPI;
+			_bobAnim -= twoPi;
 		}
 
-		var speed = new Vector2( velocity.x, velocity.y ).Length;
+		float speed = new Vector2(velocity.x, velocity.y).Length;
 		speed = speed > 10.0 ? speed : 0.0f;
-		var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( bobAnim );
-		offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
+		Vector3 offset = BobDirection * (speed * 0.005f) * MathF.Cos(_bobAnim);
+		offset = offset.WithZ(-MathF.Abs(offset.z));
 
 		return offset;
 	}

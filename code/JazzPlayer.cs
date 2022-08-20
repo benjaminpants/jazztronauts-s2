@@ -1,11 +1,9 @@
 ﻿using Sandbox;
 
-
 namespace Jazztronauts;
 
-partial class JazzPlayer : Player
+internal partial class JazzPlayer : Player
 {
-
 	[Net]
 	public int Money { get; set; } = 0;
 
@@ -16,17 +14,16 @@ partial class JazzPlayer : Player
 	{
 		Inventory = new Inventory(this);
 	}
-	
 
-	public JazzPlayer( Client cl ) : this()
+	public JazzPlayer(Client cl) : this()
 	{
 		// Load clothing from client data
-		Clothing.LoadFromClient( cl );
+		Clothing.LoadFromClient(cl);
 	}
 
 	public override void Respawn()
 	{
-		SetModel( "models/citizen/citizen.vmdl" );
+		SetModel("models/citizen/citizen.vmdl");
 
 		Controller = new WalkController
 		{
@@ -42,7 +39,7 @@ partial class JazzPlayer : Player
 
 		CameraMode = new FirstPersonCamera();
 
-		Clothing.DressEntity( this );
+		Clothing.DressEntity(this);
 
 		EnableAllCollisions = true;
 		EnableDrawing = true;
@@ -51,61 +48,58 @@ partial class JazzPlayer : Player
 
 		//Clothing.DressEntity( this );
 
-		var ps = new PropSnatcher();
+		PropSnatcher ps = new();
 
-		Inventory.Add( ps, true );
-
+		Inventory.Add(ps, true);
 
 		//Inventory.SetActiveSlot(0,false);
 
 		base.Respawn();
 	}
 
-	public Entity SearchForStealables( )
+	public Entity SearchForStealables()
 	{
-		var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 120 )
-			.Ignore( this )
+		TraceResult tr = Trace.Ray(EyePosition, EyePosition + EyeRotation.Forward * 120)
+			.Ignore(this)
 			.Run();
 
 		// See if any of the parent entities are usable if we ain't.
-		var ent = tr.Entity;
-		while ( ent.IsValid() && !JazzHelpers.CheckIfEntityIsValidStealable( ent ) )
+		Entity ent = tr.Entity;
+		while (ent.IsValid() && !JazzHelpers.CheckIfEntityIsValidStealable(ent))
 		{
 			ent = ent.Parent;
 		}
 
 		// Nothing found, try a wider search
-		if ( !JazzHelpers.CheckIfEntityIsValidStealable( ent ) )
+		if (!JazzHelpers.CheckIfEntityIsValidStealable(ent))
 		{
-			tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 85 )
-			.Radius( 2 )
-			.Ignore( this )
+			tr = Trace.Ray(EyePosition, EyePosition + EyeRotation.Forward * 85)
+			.Radius(2)
+			.Ignore(this)
 			.Run();
 
 			// See if any of the parent entities are usable if we ain't.
 			ent = tr.Entity;
-			while ( ent.IsValid() && !JazzHelpers.CheckIfEntityIsValidStealable( ent ) )
+			while (ent.IsValid() && !JazzHelpers.CheckIfEntityIsValidStealable(ent))
 			{
 				ent = ent.Parent;
 			}
 		}
 
-		if ( JazzHelpers.CheckIfEntityIsValidStealable( ent ) ) return ent;
+		if (JazzHelpers.CheckIfEntityIsValidStealable(ent)) return ent;
 
 		return null;
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate(Client cl)
 	{
-		base.Simulate( cl );
+		base.Simulate(cl);
 
 		SimulateActiveChild(cl, Inventory.Active);
 
-		
-
-		if ( Input.Pressed( InputButton.View ) )
+		if (Input.Pressed(InputButton.View))
 		{
-			if ( CameraMode is ThirdPersonCamera )
+			if (CameraMode is ThirdPersonCamera)
 			{
 				CameraMode = new FirstPersonCamera();
 			}
@@ -115,5 +109,4 @@ partial class JazzPlayer : Player
 			}
 		}
 	}
-
 }
