@@ -1,4 +1,6 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Jazztronauts;
 
@@ -35,9 +37,15 @@ public class PropSnatcher : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		if (!IsServer) return;
-		JazzShard model = new JazzShard();
-		model.Position = JazzHelpers.GetRandomSpot((Vector3.Up * 64f)).Value;
+		//iterate through every sceneobject. I can't find a way to actually check if the entites these represent are world objects or not. But this DOES contain static props.
+		
+		List<SceneObject> list = Map.Scene.SceneObjects.ToList();
+
+		foreach (SceneObject item in list)
+		{
+			item.SetMaterialOverride(Material.Load("materials/jazz_void.vmat"));
+		}
+		
 	}
 
 
