@@ -55,7 +55,6 @@ public partial class PropSnatcher : Weapon
 					if ( animent == null) return;
 					var cp = new CollectedProp(animent);
 					(Owner as JazzPlayer).Money += JazzHelpers.CalculateModelWorth(animent.Model);
-					Log.Info((Owner as JazzPlayer).Money);
 					ent.Delete();
 				}
 			}
