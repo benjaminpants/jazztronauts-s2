@@ -1,0 +1,108 @@
+{
+  "Title": "Jazztronauts: Source 2",
+  "Type": "game",
+  "Org": "local",
+  "Ident": "jazztronauts",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": [],
+  "HasCode": true,
+  "CodePath": "/code/",
+  "RootNamespace": null,
+  "Metadata": {
+    "MaxPlayers": 64,
+    "MinPlayers": 1,
+    "GameNetworkType": "Multiplayer",
+    "MapSelect": "Unrestricted",
+    "MapList": [
+      "facepunch.flatgrass"
+    ],
+    "RankType": "None",
+    "PerMapRanking": false,
+    "LeaderboardType": "None",
+    "Collision": {
+      "Defaults": {
+        "solid": "Collide",
+        "trigger": "Trigger",
+        "ladder": "Ignore",
+        "water": "Trigger",
+        "debris": "Unset",
+        "player": "Unset",
+        "glass": "Unset"
+      },
+      "Pairs": [
+        {
+          "a": "solid",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "playerclip",
+          "r": "Ignore"
+        },
+        {
+          "a": "solid",
+          "b": "trigger",
+          "r": "Trigger"
+        },
+        {
+          "a": "playerclip",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "debris",
+          "b": "debris"
+        },
+        {
+          "a": "debris",
+          "b": "player",
+          "r": "Ignore"
+        },
+        {
+          "a": "trigger",
+          "b": "player"
+        },
+        {
+          "a": "ladder",
+          "b": "player"
+        },
+        {
+          "a": "trigger",
+          "b": "debris"
+        },
+        {
+          "a": "ladder",
+          "b": "debris"
+        },
+        {
+          "a": "player",
+          "b": "player"
+        },
+        {
+          "a": "player",
+          "b": "glass",
+          "r": "Trigger"
+        },
+        {
+          "a": "trigger",
+          "b": "glass",
+          "r": "Ignore"
+        },
+        {
+          "a": "glass",
+          "b": "glass",
+          "r": "Ignore"
+        },
+        {
+          "a": "water",
+          "b": "glass"
+        }
+      ]
+    },
+    "ProjectTemplate": null,
+    "GameCategory": "None"
+  }
+}

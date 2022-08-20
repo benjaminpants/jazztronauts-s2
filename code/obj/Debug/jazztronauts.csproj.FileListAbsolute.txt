@@ -1,0 +1,5 @@
+D:\Repos\s&box\jazztronauts-s2\code\obj\Debug\jazztronauts.csproj.AssemblyReference.cache
+D:\Repos\s&box\jazztronauts-s2\code\obj\Debug\jazztronauts.GeneratedMSBuildEditorConfig.editorconfig
+D:\Repos\s&box\jazztronauts-s2\code\obj\Debug\jazztronauts.AssemblyInfoInputs.cache
+D:\Repos\s&box\jazztronauts-s2\code\obj\Debug\jazztronauts.AssemblyInfo.cs
+D:\Repos\s&box\jazztronauts-s2\code\obj\Debug\jazztronauts.csproj.CoreCompileInputs.cache
