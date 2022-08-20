@@ -1,5 +1,7 @@
-﻿using Sandbox;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Sandbox;
+
+namespace Jazztronauts;
 
 public partial class Weapon : BaseWeapon, IUse
 {
@@ -25,43 +27,45 @@ public partial class Weapon : BaseWeapon, IUse
 			Parent = this,
 			Position = Position,
 			EnableTouch = true,
-			EnableSelfCollisions = false
+			EnableSelfCollisions = false,
+			PhysicsBody =
+			{
+				AutoSleep = false
+			}
 		};
-
-		PickupTrigger.PhysicsBody.AutoSleep = false;
 	}
 
-	public override void ActiveStart( Entity ent )
+	public override void ActiveStart(Entity ent)
 	{
-		base.ActiveStart( ent );
+		base.ActiveStart(ent);
 
 		TimeSinceDeployed = 0;
 	}
 
 	public override void Reload()
 	{
-		if ( IsReloading )
+		if (IsReloading)
 			return;
 
 		TimeSinceReload = 0;
 		IsReloading = true;
 
-		(Owner as AnimatedEntity)?.SetAnimParameter( "b_reload", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter("b_reload", true);
 
 		StartReloadEffects();
 	}
 
-	public override void Simulate( Client owner )
+	public override void Simulate(Client owner)
 	{
-		if ( TimeSinceDeployed < 0.6f )
+		if (TimeSinceDeployed < 0.6f)
 			return;
 
-		if ( !IsReloading )
+		if (!IsReloading)
 		{
-			base.Simulate( owner );
+			base.Simulate(owner);
 		}
 
-		if ( IsReloading && TimeSinceReload > ReloadTime )
+		if (IsReloading && TimeSinceReload > ReloadTime)
 		{
 			OnReloadFinish();
 		}
@@ -75,7 +79,7 @@ public partial class Weapon : BaseWeapon, IUse
 	[ClientRpc]
 	public virtual void StartReloadEffects()
 	{
-		ViewModelEntity?.SetAnimParameter( "reload", true );
+		ViewModelEntity?.SetAnimParameter("reload", true);
 
 		// TODO - player third person model reload
 	}
@@ -84,7 +88,7 @@ public partial class Weapon : BaseWeapon, IUse
 	{
 		Host.AssertClient();
 
-		if ( string.IsNullOrEmpty( ViewModelPath ) )
+		if (string.IsNullOrEmpty(ViewModelPath))
 			return;
 
 		ViewModelEntity = new ViewModel
@@ -94,30 +98,30 @@ public partial class Weapon : BaseWeapon, IUse
 			EnableViewmodelRendering = true
 		};
 
-		ViewModelEntity.SetModel( ViewModelPath );
+		ViewModelEntity.SetModel(ViewModelPath);
 	}
 
-	public bool OnUse( Entity user )
+	public bool OnUse(Entity user)
 	{
-		if ( Owner != null )
+		if (Owner != null)
 			return false;
 
-		if ( !user.IsValid() )
+		if (!user.IsValid())
 			return false;
 
-		user.StartTouch( this );
+		user.StartTouch(this);
 
 		return false;
 	}
 
-	public virtual bool IsUsable( Entity user )
+	public virtual bool IsUsable(Entity user)
 	{
-		var player = user as Player;
-		if ( Owner != null ) return false;
+		Player player = user as Player;
+		if (Owner != null) return false;
 
-		if ( player.Inventory is Inventory inventory )
+		if (player.Inventory is Inventory inventory)
 		{
-			return inventory.CanAdd( this );
+			return inventory.CanAdd(this);
 		}
 
 		return true;
@@ -133,30 +137,30 @@ public partial class Weapon : BaseWeapon, IUse
 	{
 		Host.AssertClient();
 
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		Particles.Create("particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle");
 
-		ViewModelEntity?.SetAnimParameter( "fire", true );
+		ViewModelEntity?.SetAnimParameter("fire", true);
 	}
 
-	public override IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2.0f )
+	public override IEnumerable<TraceResult> TraceBullet(Vector3 start, Vector3 end, float radius = 2.0f)
 	{
-		bool underWater = Trace.TestPoint( start, "water" );
+		bool underWater = Trace.TestPoint(start, "water");
 
-		var trace = Trace.Ray( start, end )
-				.UseHitboxes()
-				.WithAnyTags( "solid", "player", "npc", "glass" )
-				.Ignore( this )
-				.Size( radius );
+		Trace trace = Trace.Ray(start, end)
+			.UseHitboxes()
+			.WithAnyTags("solid", "player", "npc", "glass")
+			.Ignore(this)
+			.Size(radius);
 
 		//
 		// If we're not underwater then we can hit water
 		//
-		if ( !underWater )
-			trace = trace.WithAnyTags( "water" );
+		if (!underWater)
+			trace = trace.WithAnyTags("water");
 
-		var tr = trace.Run();
+		TraceResult tr = trace.Run();
 
-		if ( tr.Hit )
+		if (tr.Hit)
 			yield return tr;
 
 		//
@@ -164,26 +168,26 @@ public partial class Weapon : BaseWeapon, IUse
 		//
 	}
 
-	public IEnumerable<TraceResult> TraceMelee( Vector3 start, Vector3 end, float radius = 2.0f )
+	public IEnumerable<TraceResult> TraceMelee(Vector3 start, Vector3 end, float radius = 2.0f)
 	{
-		var trace = Trace.Ray( start, end )
-				.UseHitboxes()
-				.WithAnyTags( "solid", "player", "npc", "glass" )
-				.Ignore( this );
+		Trace trace = Trace.Ray(start, end)
+			.UseHitboxes()
+			.WithAnyTags("solid", "player", "npc", "glass")
+			.Ignore(this);
 
-		var tr = trace.Run();
+		TraceResult tr = trace.Run();
 
-		if ( tr.Hit )
+		if (tr.Hit)
 		{
 			yield return tr;
 		}
 		else
 		{
-			trace = trace.Size( radius );
+			trace = trace.Size(radius);
 
 			tr = trace.Run();
 
-			if ( tr.Hit )
+			if (tr.Hit)
 			{
 				yield return tr;
 			}
@@ -193,9 +197,9 @@ public partial class Weapon : BaseWeapon, IUse
 	/// <summary>
 	/// Shoot a single bullet
 	/// </summary>
-	public virtual void ShootBullet( Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize )
+	public virtual void ShootBullet(Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize)
 	{
-		var forward = dir;
+		Vector3 forward = dir;
 		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
 		forward = forward.Normal;
 
@@ -203,24 +207,24 @@ public partial class Weapon : BaseWeapon, IUse
 		// ShootBullet is coded in a way where we can have bullets pass through shit
 		// or bounce off shit, in which case it'll return multiple results
 		//
-		foreach ( var tr in TraceBullet( pos, pos + forward * 5000, bulletSize ) )
+		foreach (TraceResult tr in TraceBullet(pos, pos + forward * 5000, bulletSize))
 		{
-			tr.Surface.DoBulletImpact( tr );
+			tr.Surface.DoBulletImpact(tr);
 
-			if ( !IsServer ) continue;
-			if ( !tr.Entity.IsValid() ) continue;
+			if (!IsServer) continue;
+			if (!tr.Entity.IsValid()) continue;
 
 			//
 			// We turn predictiuon off for this, so any exploding effects don't get culled etc
 			//
-			using ( Prediction.Off() )
+			using (Prediction.Off())
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, forward * 100 * force, damage )
-					.UsingTraceResult( tr )
-					.WithAttacker( Owner )
-					.WithWeapon( this );
+				DamageInfo damageInfo = DamageInfo.FromBullet(tr.EndPosition, forward * 100 * force, damage)
+					.UsingTraceResult(tr)
+					.WithAttacker(Owner)
+					.WithWeapon(this);
 
-				tr.Entity.TakeDamage( damageInfo );
+				tr.Entity.TakeDamage(damageInfo);
 			}
 		}
 	}
@@ -228,23 +232,23 @@ public partial class Weapon : BaseWeapon, IUse
 	/// <summary>
 	/// Shoot a single bullet from owners view point
 	/// </summary>
-	public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
+	public virtual void ShootBullet(float spread, float force, float damage, float bulletSize)
 	{
-		Rand.SetSeed( Time.Tick );
-		ShootBullet( Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize );
+		Rand.SetSeed(Time.Tick);
+		ShootBullet(Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize);
 	}
 
 	/// <summary>
 	/// Shoot a multiple bullets from owners view point
 	/// </summary>
-	public virtual void ShootBullets( int numBullets, float spread, float force, float damage, float bulletSize )
+	public virtual void ShootBullets(int numBullets, float spread, float force, float damage, float bulletSize)
 	{
-		var pos = Owner.EyePosition;
-		var dir = Owner.EyeRotation.Forward;
+		Vector3 pos = Owner.EyePosition;
+		Vector3 dir = Owner.EyeRotation.Forward;
 
-		for ( int i = 0; i < numBullets; i++ )
+		for (int i = 0; i < numBullets; i++)
 		{
-			ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );
+			ShootBullet(pos, dir, spread, force / numBullets, damage, bulletSize);
 		}
 	}
 }

@@ -1,8 +1,5 @@
 ﻿using Sandbox;
 
-//
-// You don't need to put things in a namespace, but it doesn't hurt.
-//
 namespace Jazztronauts;
 
 /// <summary>
@@ -12,21 +9,17 @@ namespace Jazztronauts;
 /// You can use this to create things like HUDs and declare which player class
 /// to use for spawned players.
 /// </summary>
-public partial class Jazztronauts : Sandbox.Game
+public class Jazztronauts : Game
 {
-	public Jazztronauts()
-	{
-	}
-
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
-	public override void ClientJoined( Client client )
+	public override void ClientJoined(Client client)
 	{
-		base.ClientJoined( client );
+		base.ClientJoined(client);
 
 		// Create a pawn for this client to play with
-		var player = new JazzPlayer(client);
+		JazzPlayer player = new(client);
 
 		player.Respawn();
 
