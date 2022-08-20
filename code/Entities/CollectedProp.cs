@@ -15,7 +15,8 @@ public class CollectedProp : Prop
 		Model = tocopy.Model;
 		Position = tocopy.Position;
 		Rotation = tocopy.Rotation;
-		RenderColor = Color.Magenta;
+		RenderColor = tocopy.RenderColor;
+		CopyMaterialOverrides(tocopy);
 		PhysicsBody.GravityEnabled = false;
 		ApplyLocalAngularImpulse(Vector3.Random * 200);
 		Velocity = Vector3.Up * 100f;

@@ -109,6 +109,11 @@ internal partial class JazzPlayer : Player
 		}
 	}
 
+	public override float FootstepVolume()
+	{
+		return Velocity.WithZ(0).Length.LerpInverse(0.0f, 200.0f) * 5.0f;
+	}
+
 	public override void Simulate(Client cl)
 	{
 		base.Simulate(cl);

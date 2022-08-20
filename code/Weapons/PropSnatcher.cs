@@ -8,8 +8,8 @@ public class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
-	public override float PrimaryRate => 15.0f;
-	public override float SecondaryRate => 1.0f;
+	public override float PrimaryRate => 15f;
+	public override float SecondaryRate => 2f;
 
 	public override void Spawn()
 	{
@@ -29,6 +29,17 @@ public class PropSnatcher : Weapon
 		anim.Handedness = CitizenAnimationHelper.Hand.Right;
 		anim.AimBodyWeight = 0.5f;
 	}
+
+	public override void AttackSecondary()
+	{
+		TimeSincePrimaryAttack = 0;
+		TimeSinceSecondaryAttack = 0;
+
+		if (!IsServer) return;
+		JazzShard model = new JazzShard();
+		model.Position = JazzHelpers.GetRandomSpot((Vector3.Up * 64f)).Value;
+	}
+
 
 	public override void AttackPrimary()
 	{
