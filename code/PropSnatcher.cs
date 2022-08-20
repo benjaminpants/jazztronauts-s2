@@ -35,17 +35,24 @@ public partial class PropSnatcher : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		PlaySound( "rust_pistol.shoot" );
-
 		var forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
 
-
+		bool didsnatch = false;
+		
+		
 		foreach (var tr in TraceMelee(Owner.EyePosition, Owner.EyePosition + (forward * 80), 70f))
 		{
-			if ( !IsServer ) continue;
 
 			var ent = tr.Entity;
+
+			if ( JazzHelpers.CheckIfEntityIsValidStealable( ent ) )
+			{
+				didsnatch = true;
+			}
+
+			if ( !IsServer ) continue;
+
 
 			using ( Prediction.Off() )
 			{
@@ -58,6 +65,16 @@ public partial class PropSnatcher : Weapon
 					ent.Delete();
 				}
 			}
+
+		}
+
+		if ( didsnatch )
+		{
+			PlaySound( "snatch_get" );
+		}
+		else
+		{
+			PlaySound( "snatch_miss" );
 		}
 
 		(Owner as AnimatedEntity)?.SetAnimParameter( "b_attack", true );
