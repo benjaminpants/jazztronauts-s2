@@ -3,8 +3,8 @@
 namespace Jazztronauts;
 
 [Spawnable]
-[Library( "weapon_propsnatcher", Title = "PropSnatcher" )]
-public partial class PropSnatcher : Weapon
+[Library("weapon_propsnatcher", Title = "PropSnatcher")]
+public class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
@@ -15,15 +15,15 @@ public partial class PropSnatcher : Weapon
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 	}
 
 	public override bool CanPrimaryAttack()
 	{
-		return base.CanPrimaryAttack() && Input.Pressed( InputButton.PrimaryAttack );
+		return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);
 	}
 
-	public override void SimulateAnimator( CitizenAnimationHelper anim )
+	public override void SimulateAnimator(CitizenAnimationHelper anim)
 	{
 		anim.HoldType = CitizenAnimationHelper.HoldTypes.HoldItem;
 		anim.Handedness = CitizenAnimationHelper.Hand.Right;
@@ -35,48 +35,46 @@ public partial class PropSnatcher : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		var forward = Owner.EyeRotation.Forward;
+		Vector3 forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool didsnatch = false;
-		
-		
-		foreach (var tr in TraceMelee(Owner.EyePosition, Owner.EyePosition + (forward * 80), 70f))
+
+
+		foreach (TraceResult tr in TraceMelee(Owner.EyePosition, Owner.EyePosition + forward * 80, 70f))
 		{
+			Entity ent = tr.Entity;
 
-			var ent = tr.Entity;
-
-			if ( JazzHelpers.CheckIfEntityIsValidStealable( ent ) )
+			if (JazzHelpers.CheckIfEntityIsValidStealable(ent))
 			{
 				didsnatch = true;
 			}
 
-			if ( !IsServer ) continue;
+			if (!IsServer) continue;
 
 
-			using ( Prediction.Off() )
+			using (Prediction.Off())
 			{
-				if ( JazzHelpers.CheckIfEntityIsValidStealable(ent))
+				if (JazzHelpers.CheckIfEntityIsValidStealable(ent))
 				{
-					var animent = (ent as ModelEntity);
-					if ( animent == null) return;
-					var cp = new CollectedProp(animent);
-					(Owner as JazzPlayer).Money += JazzHelpers.CalculateModelWorth(animent.Model);
+					if (ent is not ModelEntity animent) return;
+					CollectedProp cp = new(animent);
+					((JazzPlayer)Owner).Money += JazzHelpers.CalculateModelWorth(animent.Model);
 					ent.Delete();
 				}
 			}
 
 		}
 
-		if ( didsnatch )
+		if (didsnatch)
 		{
-			PlaySound( "snatch_get" );
+			PlaySound("snatch_get");
 		}
 		else
 		{
-			PlaySound( "snatch_miss" );
+			PlaySound("snatch_miss");
 		}
 
-		(Owner as AnimatedEntity)?.SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter("b_attack", true);
 	}
 }
