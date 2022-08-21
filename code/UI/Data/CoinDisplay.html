@@ -1,5 +1,11 @@
 ﻿<link rel="stylesheet" href="coindisplay.scss">
 
-<div>
-	<div class="coin-display"><text @text="Coins"></text></div>
+<div class="hud-container">
+	<div class="coin-display">
+		<div class="text-cluster">
+			<text>$</text>
+			<text @text="Coins"></text>
+		</div>
+		<img class="coin-image" src="/ui/data/catcoin.png"/>
+	</div>
 </div>

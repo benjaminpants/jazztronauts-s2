@@ -1,5 +1,26 @@
-﻿.coin-display {
-	width: 400px;
-	height: 100px;
-	background-color: green;
+﻿.hud-container {
+	justify-content: flex-end;
+	align-items: baseline;
+	width: 100%;
+	font-family: "KG Shake it Off Chunky Mono";
+	color: white;
+	font-weight: 1500;
+}
+
+.coin-display {
+	margin: 15px;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: auto;
+	border-radius: 10px;
+}
+
+.coin-display > div,
+.coin-display > text {
+	margin: 0 10px;
+}
+
+.coin-image {
+	width: 80px;
+	height: 80px;
 }
