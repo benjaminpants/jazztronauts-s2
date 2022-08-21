@@ -57,6 +57,7 @@ public class JazzShard : ModelEntity
 		bool TouchedPlayer = (other is JazzPlayer);
 		if (TouchedPlayer && IsClient)
 		{
+			AmbienceSound.SetVolume(0f);
 			AmbienceSound.Stop();
 		}
 		if (!IsServer) return;
