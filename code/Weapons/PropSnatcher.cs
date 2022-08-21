@@ -20,6 +20,12 @@ public class PropSnatcher : Weapon
 		SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 	}
 
+
+	public override void Reload()
+	{
+		//no.
+	}
+
 	public override bool CanPrimaryAttack()
 	{
 		return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);

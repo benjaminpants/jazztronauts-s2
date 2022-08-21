@@ -9,7 +9,9 @@ public class JazzShard : ModelEntity
 
 	Vector3 BasePosition = Vector3.Zero;
 
-	Sound? AmbienceSound;
+	Sound AmbienceSound;
+
+	PointLightEntity Light;
 	
 	public JazzShard()
 	{
@@ -28,21 +30,43 @@ public class JazzShard : ModelEntity
 
 		Tags.Add("trigger");
 
-		AmbienceSound = Sound.FromWorld("shard.hum", Position);
+		Light = new PointLightEntity
+		{
+			Enabled = true,
+			Color = Color.White,
+			DynamicShadows = false,
+			Range = 256,
+			Falloff = 1.0f,
+			LinearAttenuation = 0.0f,
+			QuadraticAttenuation = 1.0f,
+			Brightness = 1f
+		};
 
+		//AmbienceSound = Sound.FromEntity("shard.hum", this);
+
+	}
+
+	public override void ClientSpawn()
+	{
+		AmbienceSound = Sound.FromEntity("shard.hum", this);
 	}
 
 	public override void StartTouch(Entity other)
 	{
 		base.StartTouch(other);
-
+		bool TouchedPlayer = (other is JazzPlayer);
+		if (TouchedPlayer && IsClient)
+		{
+			AmbienceSound.Stop();
+		}
 		if (!IsServer) return;
 
-		if (other is JazzPlayer)
+		if (TouchedPlayer)
 		{
 			Log.Info("Shard Collected!");
 			Sound.FromWorld("rust_pumpshotgun.shootdouble", Position);
 			Particles.Create("particles/explosion/barrel_explosion/explosion_barrel.vpcf", Position);
+			Light.Delete();
 			Delete();
 		}
 	}
@@ -56,11 +80,10 @@ public class JazzShard : ModelEntity
 	[Event.Tick.Server]
 	protected void ServerUpdate()
 	{
-		
-
 		if (BasePosition == Vector3.Zero)
 		{
 			BasePosition = Position;
+			Light.Position = BasePosition;
 			if (BasePosition == Vector3.Zero)
 			{
 				throw new Exception();
