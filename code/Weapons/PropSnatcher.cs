@@ -87,11 +87,11 @@ public class PropSnatcher : Weapon
 
 		if (didsnatch)
 		{
-			PlaySound("snatch_get");
+			PlaySound("snatcher.get");
 		}
 		else
 		{
-			PlaySound("snatch_miss");
+			PlaySound("snatcher.miss");
 		}
 
 		(Owner as AnimatedEntity)?.SetAnimParameter("b_attack", true);

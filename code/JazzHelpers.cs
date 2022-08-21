@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Jazztronauts;
@@ -25,7 +26,7 @@ public static class JazzHelpers
 	{
 		if (!NavMesh.IsLoaded)
 		{
-			throw new Exception("No proper navmesh was found. TODO: Make a shard spawning system for maps that dont have navmeshes");
+			return Entity.All.OrderBy(x => Guid.NewGuid()).ToList().FirstOrDefault().Position + ((Vector3.Random * 128f) * new Vector3(1,1,0));
 		}
 
 		//NavMesh.GetPointWithinRadius();

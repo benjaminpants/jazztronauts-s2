@@ -27,7 +27,7 @@ public class Jazztronauts : Game
 
 		if (!IsClient) return;
 
-		//_mainHud = new MainHUD();
+		_mainHud = new MainHUD();
 	}
 
 	/// <summary>
@@ -70,6 +70,6 @@ public class Jazztronauts : Game
 		if (!IsClient) return;
 
 		_mainHud?.Delete();
-		//_mainHud = new MainHUD();
+		_mainHud = new MainHUD();
 	}
 }

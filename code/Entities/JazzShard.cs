@@ -28,7 +28,7 @@ public class JazzShard : ModelEntity
 
 		Tags.Add("trigger");
 
-		AmbienceSound = Sound.FromWorld("shard_hum", Position);
+		AmbienceSound = Sound.FromWorld("shard.hum", Position);
 
 	}
 

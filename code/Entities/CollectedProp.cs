@@ -25,6 +25,11 @@ public class CollectedProp : Prop
 		Tags.Add("debris");
 	}
 
+	public override void TakeDamage(DamageInfo info)
+	{
+		//no.
+	}
+
 	[Event.Tick.Server]
 	protected void ServerUpdate()
 	{
@@ -36,6 +41,7 @@ public class CollectedProp : Prop
 		}
 		if (DestroyTimer <= 0f)
 		{
+			Sound.FromWorld("snatcher.ding", Position);
 			Delete();
 		}
 	}
