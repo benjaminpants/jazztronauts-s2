@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Jazztronauts.UI
 {
-	[UseTemplate]
+	[UseTemplate("/Code/Ui/Data/CoinDisplay.html")]
 	internal class CoinDisplay : Panel
 	{
 		public int Coins { get; set; } = 69420;

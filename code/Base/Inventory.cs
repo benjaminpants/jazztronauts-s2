@@ -37,6 +37,32 @@ internal class Inventory : BaseInventory
 		return List.Any(x => x?.GetType() == t);
 	}
 
+	public override bool SetActive(Entity ent)
+	{
+		Entity active_before = Active;
+		bool toreturn = base.SetActive(ent);
+		if (active_before == null) return toreturn;
+		if (active_before != Active)
+		{
+			((Weapon)active_before).OnUnequipt();
+			((Weapon)Active).OnEquipt();
+		}
+		return toreturn;
+	}
+
+	public override bool SetActiveSlot(int i, bool evenIfEmpty = false)
+	{
+		Entity active_before = Active;
+		bool toreturn = base.SetActiveSlot(i, evenIfEmpty);
+		if (active_before == null) return toreturn;
+		if (active_before != Active)
+		{
+			((Weapon)active_before).OnUnequipt();
+			((Weapon)Active).OnEquipt();
+		}
+		return toreturn;
+	}
+
 	public override bool Drop(Entity ent)
 	{
 		if (!Host.IsServer)

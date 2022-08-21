@@ -25,7 +25,7 @@ internal partial class JazzPlayer : Player
 	{
 		SetModel("models/citizen/citizen.vmdl");
 
-		Controller = new WalkController
+		Controller = new JazzWalkController
 		{
 			WalkSpeed = 120,
 			SprintSpeed = 240,
@@ -47,14 +47,25 @@ internal partial class JazzPlayer : Player
 		EnableShadowInFirstPerson = true;
 
 		//Clothing.DressEntity( this );
-
+		
 		PropSnatcher ps = new();
 
 		Inventory.Add(ps, true);
 
+		Inventory.Add(new RunTool(), false);
+
 		//Inventory.SetActiveSlot(0,false);
 
 		base.Respawn();
+	}
+
+	public override void OnKilled()
+	{
+		base.OnKilled();
+		
+		((Weapon)Inventory.Active).OnUnequipt();
+
+		Inventory.DeleteContents();
 	}
 
 	public Entity SearchForStealables()
@@ -143,6 +154,16 @@ internal partial class JazzPlayer : Player
 			{
 				CameraMode = new ThirdPersonCamera();
 			}
+		}
+
+		if (Input.Pressed(InputButton.Slot1))
+		{
+			Inventory.SetActiveSlot(0,false);
+		}
+
+		if (Input.Pressed(InputButton.Slot2))
+		{
+			Inventory.SetActiveSlot(1, false);
 		}
 	}
 }

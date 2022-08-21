@@ -194,9 +194,20 @@ public partial class Weapon : BaseWeapon, IUse
 		}
 	}
 
+	public virtual void OnEquipt()
+	{
+	}
+
+	public virtual void OnUnequipt()
+	{
+	}
+
+
+
 	/// <summary>
 	/// Shoot a single bullet
 	/// </summary>
+	/// 
 	public virtual void ShootBullet(Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize)
 	{
 		Vector3 forward = dir;
