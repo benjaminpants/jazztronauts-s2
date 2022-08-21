@@ -10,7 +10,7 @@ public class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
-	public override float PrimaryRate => 15f;
+	public override float PrimaryRate => 6f;
 	public override float SecondaryRate => 2f;
 
 	public override void Spawn()
@@ -28,7 +28,7 @@ public class PropSnatcher : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);
+		return base.CanPrimaryAttack();
 	}
 
 	public override void SimulateAnimator(CitizenAnimationHelper anim)
