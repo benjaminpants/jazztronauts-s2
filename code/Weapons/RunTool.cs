@@ -1,8 +1,7 @@
-﻿using Sandbox;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Jazztronauts.Entities;
+using Sandbox;
 
-namespace Jazztronauts;
+namespace Jazztronauts.Weapons;
 
 [Spawnable]
 [Library("weapon_runtool", Title = "RunTool")]

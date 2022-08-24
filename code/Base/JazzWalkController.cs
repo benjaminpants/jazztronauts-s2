@@ -1,5 +1,5 @@
-﻿using Sandbox;
-using System;
+﻿using System;
+using Sandbox;
 
 //had to copy this entire class JUST so i could increase the jumpheight. That's stupid
 
@@ -29,7 +29,7 @@ namespace Jazztronauts
 		[Net] public float Gravity { get; set; } = 800.0f;
 		[Net] public float AirControl { get; set; } = 30.0f;
 		[Net] public float JumpMultiplier { get; set; } = 1.0f;		
-		public bool Swimming { get; set; } = false;
+		public bool Swimming { get; set; }
 		[Net] public bool AutoJump { get; set; } = false;
 
 		public Duck Duck;
@@ -198,7 +198,7 @@ namespace Jazztronauts
 			bool bStayOnGround = false;
 			if (Swimming)
 			{
-				ApplyFriction(1);
+				ApplyFriction();
 				WaterMove();
 			}
 			else if (IsTouchingLadder)
@@ -533,7 +533,7 @@ namespace Jazztronauts
 			Velocity -= BaseVelocity;
 		}
 
-		bool IsTouchingLadder = false;
+		bool IsTouchingLadder;
 		Vector3 LadderNormal;
 
 		public virtual void CheckLadder()
@@ -552,7 +552,8 @@ namespace Jazztronauts
 					return;
 
 				}
-				else if (GroundEntity != null && LadderNormal.Dot(wishvel) > 0)
+
+				if (GroundEntity != null && LadderNormal.Dot(wishvel) > 0)
 				{
 					IsTouchingLadder = false;
 

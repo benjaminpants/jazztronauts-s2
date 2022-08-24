@@ -1,16 +1,18 @@
-﻿using Sandbox;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Jazztronauts.Entities;
+using Sandbox;
 
-namespace Jazztronauts;
+namespace Jazztronauts.Weapons;
 
 [Spawnable]
-[Library("weapon_propsnatcher", Title = "PropSnatcher")]
+[Library("weapon_propsnatcher", Title = nameof(PropSnatcher))]
 public class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override float PrimaryRate => 15f;
+
 	public override float SecondaryRate => 2f;
 
 	public override void Spawn()
@@ -19,7 +21,6 @@ public class PropSnatcher : Weapon
 
 		SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 	}
-
 
 	public override void Reload()
 	{
@@ -49,24 +50,24 @@ public class PropSnatcher : Weapon
 
 		foreach (SceneObject item in list)
 		{
-			item.SetMaterialOverride(Material.Load("materials/jazz_void.vmat"));
+			//item.SetMaterialOverride(Material.Load("materials/jazz_void.vmat"));
+			item.ColorTint = Color.Random;
 		}
-		
 	}
-
 
 	public override void AttackPrimary()
 	{
+		if (Owner is not JazzPlayer playerEntity) return;
+
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		Vector3 forward = Owner.EyeRotation.Forward;
+		Vector3 forward = playerEntity.EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool didsnatch = false;
 
-
-		foreach (TraceResult tr in TraceMelee(Owner.EyePosition, Owner.EyePosition + forward * 80, 70f))
+		foreach (TraceResult tr in TraceMelee(playerEntity.EyePosition, playerEntity.EyePosition + forward * 80, 70f))
 		{
 			Entity ent = tr.Entity;
 
@@ -84,7 +85,7 @@ public class PropSnatcher : Weapon
 				{
 					if (ent is not ModelEntity animent) return;
 					CollectedProp cp = new(animent);
-					((JazzPlayer)Owner).Money += JazzHelpers.CalculateModelWorth(animent.Model);
+					playerEntity.Money += JazzHelpers.CalculateModelWorth(animent.Model);
 					ent.Delete();
 				}
 			}
@@ -100,6 +101,6 @@ public class PropSnatcher : Weapon
 			PlaySound("snatcher.miss");
 		}
 
-		(Owner as AnimatedEntity)?.SetAnimParameter("b_attack", true);
+		playerEntity.SetAnimParameter("b_attack", true);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Jazztronauts;
+namespace Jazztronauts.Entities;
 
 public class CollectedProp : Prop
 {

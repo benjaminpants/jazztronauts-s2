@@ -1,30 +1,20 @@
-﻿using Jazztronauts.UI;
-using Sandbox;
-using Sandbox.UI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Jazztronauts.Entities;
+using Jazztronauts.UI;
+using Sandbox;
 
 namespace Jazztronauts;
 
-/// <summary>
-/// This is your game class. This is an entity that is created serverside when
-/// the game starts, and is replicated to the client. 
-/// 
-/// You can use this to create things like HUDs and declare which player class
-/// to use for spawned players.
-/// </summary>
 public class Jazztronauts : Game
 {
 	private MainHUD _mainHud;
+	private IList<JazzPlayer> _players = new List<JazzPlayer>();
 
-	public int GeneratedShards = 0;
-	
+	public int GeneratedShards;
+
 	public Jazztronauts()
 	{
-
-		
-
-
 		if (!IsClient) return;
 
 		_mainHud = new MainHUD();
@@ -34,18 +24,28 @@ public class Jazztronauts : Game
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
 	/// 
-
 	public override void ClientJoined(Client client)
 	{
 		base.ClientJoined(client);
 
-
 		// Create a pawn for this client to play with
 		JazzPlayer player = new(client);
+		client.Pawn = player;
+
+		_players.Add(player);
 
 		player.Respawn();
+	}
 
-		client.Pawn = player;
+	public override void ClientDisconnect(Client client, NetworkDisconnectionReason reason)
+	{
+		base.ClientDisconnect(client, reason);
+
+		if (client.Pawn is JazzPlayer jazzPlayer)
+		{
+			_players.Remove(jazzPlayer);
+			jazzPlayer.OnDisconnect();
+		}
 	}
 
 	public override void Simulate(Client cl)
@@ -61,6 +61,16 @@ public class Jazztronauts : Game
 				model.Position = JazzHelpers.GetRandomSpot((Vector3.Up * 64f)).Value;
 				GeneratedShards++;
 			}
+		}
+	}
+
+	public override void Shutdown()
+	{
+		base.Shutdown();
+
+		foreach (JazzPlayer jazzPlayer in _players)
+		{
+			jazzPlayer.OnDisconnect();
 		}
 	}
 

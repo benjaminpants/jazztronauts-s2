@@ -1,8 +1,7 @@
-﻿using Sandbox;
-using System;
-using System.Linq;
+﻿using System;
+using Sandbox;
 
-namespace Jazztronauts;
+namespace Jazztronauts.Entities;
 
 public class JazzShard : ModelEntity
 {
@@ -12,10 +11,6 @@ public class JazzShard : ModelEntity
 	Sound AmbienceSound;
 
 	PointLightEntity Light;
-	
-	public JazzShard()
-	{
-	}
 
 	public override void Spawn()
 	{

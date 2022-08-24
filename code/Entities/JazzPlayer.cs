@@ -1,12 +1,16 @@
-﻿using Sandbox;
+﻿using Jazztronauts.Data;
+using Jazztronauts.Weapons;
+using Sandbox;
+using Player = Sandbox.Player;
 
-namespace Jazztronauts;
+namespace Jazztronauts.Entities;
 
 internal partial class JazzPlayer : Player
 {
-	[Net]
-	public int Money { get; set; } = 0;
+	private Data.Player _playerData;
 
+	[Net]
+	public long Money { get; set; }
 
 	public ClothingContainer Clothing = new();
 
@@ -19,6 +23,16 @@ internal partial class JazzPlayer : Player
 	{
 		// Load clothing from client data
 		Clothing.LoadFromClient(cl);
+		_playerData = Database.GetPlayerData(cl.PlayerId);
+		Database.SaveData(_playerData);
+	}
+
+	public void OnDisconnect()
+	{
+		if (_playerData != null)
+		{
+			Database.SaveData(_playerData);
+		}
 	}
 
 	public override void Respawn()
@@ -47,12 +61,12 @@ internal partial class JazzPlayer : Player
 		EnableShadowInFirstPerson = true;
 
 		//Clothing.DressEntity( this );
-		
+
 		PropSnatcher ps = new();
 
 		Inventory.Add(ps, true);
 
-		Inventory.Add(new RunTool(), false);
+		Inventory.Add(new RunTool());
 
 		//Inventory.SetActiveSlot(0,false);
 
@@ -62,7 +76,7 @@ internal partial class JazzPlayer : Player
 	public override void OnKilled()
 	{
 		base.OnKilled();
-		
+
 		((Weapon)Inventory.Active).OnUnequipt();
 
 		Inventory.DeleteContents();
@@ -158,12 +172,23 @@ internal partial class JazzPlayer : Player
 
 		if (Input.Pressed(InputButton.Slot1))
 		{
-			Inventory.SetActiveSlot(0,false);
+			Inventory.SetActiveSlot(0, false);
 		}
 
 		if (Input.Pressed(InputButton.Slot2))
 		{
 			Inventory.SetActiveSlot(1, false);
+		}
+	}
+
+	[Event.Hotload]
+	private void HotReload()
+	{
+		if (_playerData != null)
+		{
+			Database.SaveData(_playerData);
+			_playerData = Database.GetPlayerData(_playerData.SteamId);
+			Database.SaveData(_playerData);
 		}
 	}
 }

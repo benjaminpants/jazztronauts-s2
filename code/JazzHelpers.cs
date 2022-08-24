@@ -1,7 +1,6 @@
-﻿using Sandbox;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using Sandbox;
 
 namespace Jazztronauts;
 
@@ -36,10 +35,8 @@ public static class JazzHelpers
 		{
 			return val.Value + offset;
 		}
-		else
-		{
-			return val;
-		}
+
+		return val;
 		//(Vector3.Up * 64f);
 	}
 
