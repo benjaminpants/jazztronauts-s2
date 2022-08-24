@@ -7,5 +7,6 @@ public class MainHUD : RootPanel
 	public MainHUD()
 	{
 		AddChild<CoinDisplay>();
+		AddChild<ChatBox>();
 	}
 }
