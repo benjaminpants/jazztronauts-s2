@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Jazztronauts.Data;
 using Jazztronauts.Entities;
 using Sandbox;
 
@@ -7,7 +8,7 @@ namespace Jazztronauts.Weapons;
 
 [Spawnable]
 [Library("weapon_propsnatcher", Title = nameof(PropSnatcher))]
-public class PropSnatcher : Weapon
+public partial class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
@@ -85,7 +86,9 @@ public class PropSnatcher : Weapon
 				{
 					if (ent is not ModelEntity animent) return;
 					CollectedProp cp = new(animent);
-					playerEntity.Money += JazzHelpers.CalculateModelWorth(animent.Model);
+					//playerEntity.Data.Earned += JazzHelpers.CalculateModelWorth(animent.Model);
+					//playerEntity.UpdateClientDataEasy();
+					playerEntity.Data.AddStolenProp(animent.Model);
 					ent.Delete();
 				}
 			}

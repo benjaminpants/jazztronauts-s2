@@ -20,9 +20,9 @@
     "MapList": [
       "facepunch.flatgrass"
     ],
-    "RankType": "None",
-    "PerMapRanking": false,
-    "LeaderboardType": "None",
+    "RankType": "Best",
+    "PerMapRanking": true,
+    "LeaderboardType": "Descending",
     "Collision": {
       "Defaults": {
         "solid": "Collide",

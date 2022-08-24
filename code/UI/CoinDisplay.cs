@@ -12,7 +12,6 @@ namespace Jazztronauts.UI
 		public override void Tick()
 		{
 			JazzPlayer ply = (JazzPlayer)Local.Pawn;
-
 			Coins = ply.Money;
 		}
 	}

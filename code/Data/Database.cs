@@ -1,5 +1,6 @@
 ﻿using Jazztronauts.Data.Interfaces;
 using Sandbox;
+using System;
 
 namespace Jazztronauts.Data;
 
@@ -24,7 +25,15 @@ internal class Database
 
 	private static void SavePlayerData(Player playerData)
 	{
-		FileSystem.Data.WriteJson($"{PLAYER_DATA_PATH}/{playerData.SteamId}.json", playerData);
+		try
+		{
+			FileSystem.Data.CreateDirectory("jazztronauts/playerdata/"); //what the fuck.
+			FileSystem.Data.WriteJson($"{PLAYER_DATA_PATH}/{playerData.SteamId}.json", playerData);
+		}
+		catch(Exception E)
+		{
+			Log.Warning(E);
+		}
 	}
 
 	//public static void Test()

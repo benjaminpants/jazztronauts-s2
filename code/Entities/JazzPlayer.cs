@@ -9,8 +9,32 @@ internal partial class JazzPlayer : Player
 {
 	private Data.Player _playerData;
 
-	[Net]
-	public long Money { get; set; }
+	public Data.Player Data
+	{
+		get
+		{
+			return _playerData;
+		}
+	}
+
+	public long Money {
+		get
+		{
+			return Data.Earned - Data.Spent;
+		}
+	}
+
+	[ClientRpc]
+	public void UpdateClientData(long Earned, long Spent)
+	{
+		_playerData.Earned = Earned;
+		_playerData.Spent = Spent;
+	}
+
+	public void UpdateClientDataEasy()
+	{
+		UpdateClientData(To.Single(Client),Data.Earned,Data.Spent);
+	}
 
 	public ClothingContainer Clothing = new();
 
@@ -23,12 +47,31 @@ internal partial class JazzPlayer : Player
 	{
 		// Load clothing from client data
 		Clothing.LoadFromClient(cl);
-		_playerData = Database.GetPlayerData(cl.PlayerId);
-		Database.SaveData(_playerData);
+		if (IsServer)
+		{
+			_playerData = Database.GetPlayerData(cl.PlayerId);
+			Database.SaveData(_playerData);
+		}
+	}
+
+	public override void ClientSpawn()
+	{
+		_playerData = new Data.Player();
+		Log.Info(_playerData);
+	}
+
+	public override void OnClientActive(Client client)
+	{
+		base.OnClientActive(client);
+		if (IsServer)
+		{
+			UpdateClientDataEasy();
+		}
 	}
 
 	public void OnDisconnect()
 	{
+		if (!IsServer) return;
 		if (_playerData != null)
 		{
 			Database.SaveData(_playerData);
