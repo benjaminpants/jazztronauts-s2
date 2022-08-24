@@ -6,14 +6,36 @@ using Sandbox;
 
 namespace Jazztronauts;
 
-public class Jazztronauts : Game
+public class JazztronautsGame : Game
 {
 	private MainHUD _mainHud;
 	private IList<JazzPlayer> _players = new List<JazzPlayer>();
 
+	private static JazzGameRules _gameRules;
+
+	public static JazzGameRules Rules { 
+		get
+		{
+			if (_gameRules == null)
+			{
+				_gameRules = (JazzGameRules)Entity.All.ToList().Find(e => (e is JazzGameRules));
+				if (_gameRules == null)
+				{
+					_gameRules = new JazzGameRules();
+				}
+				return _gameRules;
+			}
+			else
+			{
+				return _gameRules;
+			}
+		} }
+
 	public int GeneratedShards;
 
-	public Jazztronauts()
+	public bool HasRunMapStartup = false;
+
+	public JazztronautsGame()
 	{
 		if (!IsClient) return;
 
@@ -48,13 +70,19 @@ public class Jazztronauts : Game
 		}
 	}
 
+	// TODO: Make this. Not stupid, AKA figure out if theres a function for calling stuff when the map loads.
 	public override void Simulate(Client cl)
 	{
 		base.Simulate(cl);
 
-		if (IsServer && GeneratedShards == 0)
+		if (IsServer && !HasRunMapStartup)
 		{
-			int shardstogenerate = 5; //TODO: calculate ideal shard count for map size
+			HasRunMapStartup = true;
+			int shardstogenerate = 0; //TODO: calculate ideal shard count for map size
+			if (!Rules.IsHubOrStory)
+			{
+				shardstogenerate = Rules.ShardCount;
+			}
 			for (int i = 0; i < shardstogenerate; i++)
 			{
 				JazzShard model = new JazzShard();

@@ -31,7 +31,8 @@
         "water": "Trigger",
         "debris": "Unset",
         "player": "Unset",
-        "glass": "Unset"
+        "glass": "Unset",
+        "stolen": "Unset"
       },
       "Pairs": [
         {
@@ -101,6 +102,26 @@
         {
           "a": "water",
           "b": "glass"
+        },
+        {
+          "a": "stolen",
+          "b": "stolen",
+          "r": "Ignore"
+        },
+        {
+          "a": "player",
+          "b": "stolen",
+          "r": "Ignore"
+        },
+        {
+          "a": "debris",
+          "b": "stolen",
+          "r": "Ignore"
+        },
+        {
+          "a": "trigger",
+          "b": "stolen",
+          "r": "Ignore"
         }
       ]
     },
@@ -110,6 +131,9 @@
       "RootNamespace": "Jazztronauts",
       "DefineConstants": "JAZZTRONAUTS;ADDON;DEBUG",
       "NoWarn": "1701;1702;1591;"
+    },
+    "ControlModes": {
+      "Keyboard": true
     }
   }
 }

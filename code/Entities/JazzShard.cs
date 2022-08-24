@@ -60,6 +60,9 @@ public class JazzShard : ModelEntity
 		if (TouchedPlayer)
 		{
 			Log.Info("Shard Collected!");
+			JazzPlayer thePlayer = (JazzPlayer)other;
+			thePlayer.Data.Earned += 1000;
+			thePlayer.UpdateClientDataEasy();
 			Sound.FromWorld("rust_pumpshotgun.shootdouble", Position);
 			Particles.Create("particles/explosion/barrel_explosion/explosion_barrel.vpcf", Position);
 			Light.Delete();

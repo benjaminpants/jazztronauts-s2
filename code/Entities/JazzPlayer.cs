@@ -75,6 +75,7 @@ internal partial class JazzPlayer : Player
 		if (_playerData != null)
 		{
 			Database.SaveData(_playerData);
+			//GameServices.SubmitScore(Client.PlayerId, _playerData.StolenMapProps.CalculateWorth());
 		}
 	}
 
@@ -105,11 +106,16 @@ internal partial class JazzPlayer : Player
 
 		//Clothing.DressEntity( this );
 
-		PropSnatcher ps = new();
+		if (!JazztronautsGame.Rules.IsHubOrStory)
+		{
+			PropSnatcher ps = new();
 
-		Inventory.Add(ps, true);
+			Inventory.Add(ps, true);
 
-		Inventory.Add(new RunTool());
+			Inventory.Add(new RunTool());
+
+		}
+		
 
 		//Inventory.SetActiveSlot(0,false);
 

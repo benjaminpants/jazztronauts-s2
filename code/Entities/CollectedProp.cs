@@ -22,7 +22,7 @@ public class CollectedProp : Prop
 		Velocity = Vector3.Up * 100f;
 		Scale = tocopy.Scale;
 		Tags.Clear();
-		Tags.Add("debris");
+		Tags.Add("stolen");
 	}
 
 	public override void TakeDamage(DamageInfo info)

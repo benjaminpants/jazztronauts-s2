@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Jazztronauts.Data;
 using Sandbox;
 
 namespace Jazztronauts;
@@ -13,6 +15,16 @@ public static class JazzHelpers
 			return ent.ClassName != "worldent" && ent.ClassName != "JazzPlayer" && ent.ClassName != "CollectedProp";
 		}
 		return false;
+	}
+
+	public static long CalculateWorth(this List<StolenProps> me)
+	{
+		long final_worth = 0;
+		foreach (StolenProps prop in me)
+		{
+			final_worth += (prop.Worth * prop.Count);
+		}
+		return final_worth;
 	}
 
 	public static int CalculateModelWorth(Model mdl)

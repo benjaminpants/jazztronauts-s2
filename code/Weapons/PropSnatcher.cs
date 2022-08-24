@@ -12,7 +12,7 @@ public partial class PropSnatcher : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
-	public override float PrimaryRate => 15f;
+	public override float PrimaryRate => 10f;
 
 	public override float SecondaryRate => 2f;
 
