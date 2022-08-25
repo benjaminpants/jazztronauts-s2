@@ -52,8 +52,11 @@ namespace Jazztronauts.Entities
 
 		public void DropProp(StolenProps prop)
 		{
-			CurrentPlayer.Data.Earned += prop.Worth;
-			CurrentPlayer.UpdateClientDataEasy();
+			foreach (JazzPlayer ply in JazztronautsGame.Instance.JazzPlayers)
+			{
+				ply.Data.Earned += prop.Worth;
+				ply.UpdateClientDataEasy();
+			}
 
 			DroppedProp model = new DroppedProp();
 			model.SetModel(prop.ModelPath);

@@ -5,7 +5,7 @@ using Player = Sandbox.Player;
 
 namespace Jazztronauts.Entities;
 
-internal partial class JazzPlayer : Player
+public partial class JazzPlayer : Player
 {
 	private Data.Player _playerData;
 

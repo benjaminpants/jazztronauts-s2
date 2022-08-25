@@ -11,6 +11,16 @@ public class JazztronautsGame : Game
 	private MainHUD _mainHud;
 	private IList<JazzPlayer> _players = new List<JazzPlayer>();
 
+	public static JazztronautsGame Instance { get; private set; }
+
+	public List<JazzPlayer> JazzPlayers 
+	{
+		get
+		{
+			return (List<JazzPlayer>)_players;
+		}
+	}
+
 	private static JazzGameRules _gameRules;
 
 	public static JazzGameRules Rules { 
@@ -37,6 +47,8 @@ public class JazztronautsGame : Game
 
 	public JazztronautsGame()
 	{
+		Instance = this;
+
 		if (!IsClient) return;
 
 		_mainHud = new MainHUD();
