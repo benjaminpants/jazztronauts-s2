@@ -32,7 +32,8 @@
         "debris": "Unset",
         "player": "Unset",
         "glass": "Unset",
-        "stolen": "Unset"
+        "stolen": "Unset",
+        "bus": "Unset"
       },
       "Pairs": [
         {
@@ -122,6 +123,51 @@
           "a": "trigger",
           "b": "stolen",
           "r": "Ignore"
+        },
+        {
+          "a": "solid",
+          "b": "bus",
+          "r": "Collide"
+        },
+        {
+          "a": "stolen",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "player",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "debris",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "glass",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "water",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "ladder",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "trigger",
+          "b": "bus",
+          "r": "Ignore"
+        },
+        {
+          "a": "bus",
+          "b": "bus",
+          "r": "Trigger"
         }
       ]
     },

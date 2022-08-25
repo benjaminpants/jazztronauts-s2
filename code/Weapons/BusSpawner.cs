@@ -12,6 +12,8 @@ public class BusSpawner : Weapon
 	public override float PrimaryRate => 15f;
 	public override float SecondaryRate => 2f;
 
+	public BusSummon MySummon;
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -22,6 +24,24 @@ public class BusSpawner : Weapon
 	public override bool CanPrimaryAttack()
 	{
 		return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);
+	}
+
+	public override void Simulate(Client owner)
+	{
+		base.Simulate(owner);
+
+		if (MySummon != null)
+		{
+			if (!Input.Down(InputButton.PrimaryAttack))
+			{
+				MySummon.PlayersAiming--;
+				if (MySummon.PlayersAiming <= 0)
+				{
+					MySummon.Delete();
+				}
+				MySummon = null;
+			}
+		}
 	}
 
 	public override void SimulateAnimator(CitizenAnimationHelper anim)
@@ -36,7 +56,6 @@ public class BusSpawner : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		
 	}
 
 
@@ -47,7 +66,37 @@ public class BusSpawner : Weapon
 
 		if (!IsServer) return;
 
-		Global.ChangeLevel("jazz_bar");
+		Trace trace = Trace.Ray(Owner.EyePosition, Owner.EyePosition + (Owner.EyeRotation.Forward * 500f))
+			.UseHitboxes()
+			.WithAnyTags("solid", "bus")
+			.Ignore(this)
+			.Size(2);
+
+		TraceResult tr = trace.Run();
+
+		if (tr.Entity == null) return;
+
+		if (tr.Entity.ClassName == "BusSummon")
+		{
+			MySummon = (BusSummon)tr.Entity;
+			MySummon.PlayersAiming++;
+		}
+
+		if (tr.Entity.ClassName != "worldent") return;
+
+		BusSummon mden = new BusSummon();
+
+		mden.PlayersAiming = 1;
+
+		mden.Position = tr.EndPosition;
+
+		mden.Owner = this;
+
+		mden.Rotation = Rotation.LookAt(tr.Normal * -1, Vector3.Zero);
+
+		MySummon = mden;
+
+		//Global.ChangeLevel("jazz_bar");
 
 	}
 }

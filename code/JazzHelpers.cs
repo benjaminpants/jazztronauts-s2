@@ -13,7 +13,7 @@ public static class JazzHelpers
 	{
 		if (ent.IsValid())
 		{
-			return ent.ClassName != "worldent" && ent.ClassName != "JazzPlayer" && ent.ClassName != "CollectedProp";
+			return ent.ClassName != "worldent" && ent.ClassName != "JazzPlayer" && ent.ClassName != "DroppedProp" && ent.ClassName != "BusSummon" && ent.ClassName != "CollectedProp";
 		}
 		return false;
 	}
