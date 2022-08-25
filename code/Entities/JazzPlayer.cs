@@ -114,6 +114,8 @@ public partial class JazzPlayer : Player
 
 			Inventory.Add(new RunTool());
 
+			Inventory.Add(new BusSpawner());
+
 		}
 		
 
@@ -227,6 +229,11 @@ public partial class JazzPlayer : Player
 		if (Input.Pressed(InputButton.Slot2))
 		{
 			Inventory.SetActiveSlot(1, false);
+		}
+
+		if (Input.Pressed(InputButton.Slot3))
+		{
+			Inventory.SetActiveSlot(2, false);
 		}
 	}
 
