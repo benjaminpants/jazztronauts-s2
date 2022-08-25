@@ -18,7 +18,7 @@ public static class JazzHelpers
 		return false;
 	}
 
-	public static async Task<List<string>> GetMaps()
+	public static async Task<List<Package>> GetMaps()
 	{
 		Package.Query query = new()
 		{
@@ -31,24 +31,17 @@ public static class JazzHelpers
 
 		List<Package> p = packages.ToList();
 
-		List<string> str = new List<string>();
 
-		foreach (Package pac in p)
-		{
-			str.Add(pac.FullIdent);
-		}
-
-
-		return str;
+		return p;
 	}
 
-	public static async Task GoToRandomMap()
+	public static async Task GoToRandomMap() //TODO: delete.
 	{
-		List<string> maps = await GetMaps();
+		List<Package> maps = await GetMaps();
 		Random rng = new Random();
 
 		rng.Next();
-		Global.ChangeLevel(maps.ElementAt(rng.Next(0, maps.Count - 1)));
+		Global.ChangeLevel(maps.ElementAt(rng.Next(0, maps.Count - 1)).FullIdent);
 	}
 
 	public static long CalculateWorth(this List<StolenProps> me)
