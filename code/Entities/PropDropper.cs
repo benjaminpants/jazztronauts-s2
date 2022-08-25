@@ -11,7 +11,7 @@ namespace Jazztronauts.Entities
 	[HammerEntity]
 	[EditorModel("models/arrow.vmdl")]
 	[Library("point_propdropper", Title = nameof(PropDropper))]
-	public class PropDropper : Entity
+	public partial class PropDropper : Entity
 	{
 
 		public const float SpawnDelay = 0.1f;
@@ -21,6 +21,22 @@ namespace Jazztronauts.Entities
 		public float SpawnTimer = SpawnDelay;
 
 		private JazzPlayer CurrentPlayer;
+
+
+		/// <summary>
+		/// When the dropper starts dropping props. The player whose props it is dropping is the activator.
+		/// </summary>
+		protected Output OnDropStart { get; set; }
+
+		/// <summary>
+		/// When the dropper stops dropping props. The player whose props it stopped dropping is the activator.
+		/// </summary>
+		protected Output OnDropStop { get; set; }
+
+		/// <summary>
+		/// When the prop dropper can't start dropping props. (Either invalid entity or player has no props to drop)
+		/// </summary>
+		protected Output OnDropFail { get; set; }
 
 
 		[Event.Tick.Server]
@@ -35,6 +51,7 @@ namespace Jazztronauts.Entities
 				if (CurrentPlayerData.StolenMapProps.Count == 0)
 				{
 					CurrentPlayer = null;
+					OnDropStop.Fire(CurrentPlayer);
 					return;
 				}
 				int CurrentIndex = RNG.Next(0, CurrentPlayerData.StolenMapProps.Count);
@@ -83,14 +100,16 @@ namespace Jazztronauts.Entities
 				{
 					CurrentPlayer = player;
 					SpawnTimer = SpawnDelay;
+					OnDropStart.Fire(player);
 				}
 				else
 				{
+					OnDropFail.Fire(player);
 				}
 			}
 			else
 			{
-				Log.Warning("Tried to call DropProps without a valid player!");
+				OnDropFail.Fire(player);
 			}
 		}
 
