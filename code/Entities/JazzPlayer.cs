@@ -106,7 +106,7 @@ public partial class JazzPlayer : Player
 
 		//Clothing.DressEntity( this );
 
-		if (!JazztronautsGame.Rules.IsHubOrStory)
+		if (!JazztronautsGame.Rules.DisableSteal)
 		{
 			PropSnatcher ps = new();
 
@@ -117,7 +117,11 @@ public partial class JazzPlayer : Player
 			Inventory.Add(new BusSpawner());
 
 		}
-		
+		if (JazztronautsGame.Rules.IsHub)
+		{
+			Inventory.Add(new BusSpawner());
+		}
+
 
 		//Inventory.SetActiveSlot(0,false);
 

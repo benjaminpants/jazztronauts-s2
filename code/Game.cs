@@ -91,7 +91,7 @@ public class JazztronautsGame : Game
 		{
 			HasRunMapStartup = true;
 			int shardstogenerate = 0; //TODO: calculate ideal shard count for map size
-			if (!Rules.IsHubOrStory)
+			if (!Rules.DisableSteal)
 			{
 				shardstogenerate = Rules.ShardCount;
 			}

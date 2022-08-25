@@ -7,7 +7,7 @@ namespace Jazztronauts.Weapons;
 [Library("weapon_busspawner", Title = "BusSpawner")]
 public class BusSpawner : Weapon
 {
-	public override string ViewModelPath => "";
+	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override float PrimaryRate => 15f;
 	public override float SecondaryRate => 2f;
@@ -18,7 +18,7 @@ public class BusSpawner : Weapon
 	{
 		base.Spawn();
 
-		//SetModel("weapons/rust_pistol/rust_pistol.vmdl");
+		SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 	}
 
 	public override bool CanPrimaryAttack()

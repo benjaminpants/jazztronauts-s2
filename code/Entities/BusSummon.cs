@@ -22,7 +22,14 @@ namespace Jazztronauts.Entities
 		{
 			if (PlayersAiming == JazztronautsGame.Instance.JazzPlayers.Count)
 			{
-				Global.ChangeLevel("jazz_bar");
+				if (JazztronautsGame.Rules.IsHub)
+				{
+					_ = JazzHelpers.GoToRandomMap();
+				}
+				else
+				{
+					Global.ChangeLevel("jazz_bar");
+				}
 			}
 		}
 

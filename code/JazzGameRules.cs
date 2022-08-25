@@ -11,11 +11,16 @@ namespace Jazztronauts
 	{
 
 		/// <summary>
-		/// Is this a hub or story map? If it is a hub/story map, players won't spawn with stealing weapons.
-		/// Shards also won't spawn.
+		/// Players won't spawn with stealing weapons if this is true. Shards also won't spawn.
 		/// </summary>
-		[Property(Title = "Is Hub or Story?")]
-		public bool IsHubOrStory { get; set; } = false;
+		[Property(Title = "No Stealing Map")]
+		public bool DisableSteal { get; set; } = false;
+
+		/// <summary>
+		/// If this map is a hub, they'll spawn with the bus spawner but it'll send everyone to a random map. This is placeholder behavior.
+		/// </summary>
+		[Property(Title = "Is Hub")]
+		public bool IsHub { get; set; } = false;
 
 		/// <summary>
 		/// How many shards should spawn on this map? This value is ignored if you've manually placed shard spawnpoints.
