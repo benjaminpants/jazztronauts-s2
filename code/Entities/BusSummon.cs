@@ -28,7 +28,7 @@ namespace Jazztronauts.Entities
 				}
 				else
 				{
-					Global.ChangeLevel("jazz_bar");
+					Game.ChangeLevel("jazz_bar");
 				}
 			}
 		}

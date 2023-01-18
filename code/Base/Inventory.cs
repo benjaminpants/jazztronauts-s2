@@ -65,7 +65,7 @@ internal class Inventory : BaseInventory
 
 	public override bool Drop(Entity ent)
 	{
-		if (!Host.IsServer)
+		if (!Game.IsServer)
 			return false;
 
 		if (!Contains(ent))

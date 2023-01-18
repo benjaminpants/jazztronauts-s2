@@ -20,7 +20,8 @@ public static class JazzHelpers
 
 	public static async Task<List<Package>> GetMaps()
 	{
-		Package.Query query = new()
+		throw new NotImplementedException();
+		/*Package.Query query = new()
 		{
 			Type = Package.Type.Map,
 			Order = Package.Order.User,
@@ -32,7 +33,7 @@ public static class JazzHelpers
 		List<Package> p = packages.ToList();
 
 
-		return p;
+		return p;*/
 	}
 
 	public static async Task GoToRandomMap() //TODO: delete.
@@ -41,7 +42,7 @@ public static class JazzHelpers
 		Random rng = new Random();
 
 		rng.Next();
-		Global.ChangeLevel(maps.ElementAt(rng.Next(0, maps.Count - 1)).FullIdent);
+		Game.ChangeLevel(maps.ElementAt(rng.Next(0, maps.Count - 1)).FullIdent);
 	}
 
 	public static long CalculateWorth(this List<StolenProps> me)

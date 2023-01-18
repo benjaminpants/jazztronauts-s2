@@ -47,7 +47,7 @@ public partial class PropSnatcher : Weapon
 
 		//iterate through every sceneobject. I can't find a way to actually check if the entites these represent are world objects or not. But this DOES contain static props.
 		
-		List<SceneObject> list = Map.Scene.SceneObjects.ToList();
+		List<SceneObject> list = Scene.SceneObjects.ToList();
 
 		foreach (SceneObject item in list)
 		{
@@ -77,7 +77,7 @@ public partial class PropSnatcher : Weapon
 				didsnatch = true;
 			}
 
-			if (!IsServer) continue;
+			if (!Game.IsServer) continue;
 
 
 			using (Prediction.Off())

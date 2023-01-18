@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Jazztronauts.Entities;
 using Sandbox;
 
 namespace Jazztronauts;
@@ -86,7 +87,7 @@ public partial class Weapon : BaseWeapon, IUse
 
 	public override void CreateViewModel()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if (string.IsNullOrEmpty(ViewModelPath))
 			return;
@@ -135,7 +136,7 @@ public partial class Weapon : BaseWeapon, IUse
 	[ClientRpc]
 	protected virtual void ShootEffects()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		Particles.Create("particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle");
 
@@ -222,7 +223,7 @@ public partial class Weapon : BaseWeapon, IUse
 		{
 			tr.Surface.DoBulletImpact(tr);
 
-			if (!IsServer) continue;
+			if (!Game.IsServer) continue;
 			if (!tr.Entity.IsValid()) continue;
 
 			//
@@ -245,8 +246,8 @@ public partial class Weapon : BaseWeapon, IUse
 	/// </summary>
 	public virtual void ShootBullet(float spread, float force, float damage, float bulletSize)
 	{
-		Rand.SetSeed(Time.Tick);
-		ShootBullet(Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize);
+		Game.SetRandomSeed(Time.Tick);
+		ShootBullet(((JazzPlayer)Owner).EyePosition, ((JazzPlayer)Owner).EyeRotation.Forward, spread, force, damage, bulletSize);
 	}
 
 	/// <summary>
@@ -254,8 +255,8 @@ public partial class Weapon : BaseWeapon, IUse
 	/// </summary>
 	public virtual void ShootBullets(int numBullets, float spread, float force, float damage, float bulletSize)
 	{
-		Vector3 pos = Owner.EyePosition;
-		Vector3 dir = Owner.EyeRotation.Forward;
+		Vector3 pos = ((JazzPlayer)Owner).EyePosition;
+		Vector3 dir = ((JazzPlayer)Owner).EyeRotation.Forward;
 
 		for (int i = 0; i < numBullets; i++)
 		{

@@ -7,7 +7,7 @@ public class DroppedProp : Prop
 
 	public DroppedProp()
 	{
-		if (!IsServer) return;
+		if (!Game.IsServer) return;
 		Rotation = Rotation.Random;
 		ApplyLocalAngularImpulse(Vector3.Random * 80);
 		Velocity = Vector3.Up * 100f;

@@ -49,7 +49,7 @@ public class JazztronautsGame : GameManager
 	{
 		Instance = this;
 
-		if (!IsClient) return;
+		if (!Game.IsClient) return;
 
 		_mainHud = new MainHUD();
 	}
@@ -87,7 +87,7 @@ public class JazztronautsGame : GameManager
 	{
 		base.Simulate(cl);
 
-		if (IsServer && !HasRunMapStartup)
+		if (Game.IsServer && !HasRunMapStartup)
 		{
 			HasRunMapStartup = true;
 			int shardstogenerate = 0; //TODO: calculate ideal shard count for map size
@@ -117,7 +117,7 @@ public class JazztronautsGame : GameManager
 	[Event.Hotload]
 	public void HotloadUpdate()
 	{
-		if (!IsClient) return;
+		if (!Game.IsClient) return;
 
 		_mainHud?.Delete();
 		_mainHud = new MainHUD();

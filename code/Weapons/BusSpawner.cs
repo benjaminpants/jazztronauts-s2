@@ -64,9 +64,9 @@ public class BusSpawner : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		if (!IsServer) return;
+		if (!Game.IsServer) return;
 
-		Trace trace = Trace.Ray(Owner.EyePosition, Owner.EyePosition + (Owner.EyeRotation.Forward * 500f))
+		Trace trace = Trace.Ray(((JazzPlayer)Owner).EyePosition, ((JazzPlayer)Owner).EyePosition + (((JazzPlayer)Owner).EyeRotation.Forward * 500f))
 			.UseHitboxes()
 			.WithAnyTags("solid", "bus")
 			.Ignore(this)
