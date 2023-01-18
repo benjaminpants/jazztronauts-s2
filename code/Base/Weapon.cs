@@ -55,7 +55,7 @@ public partial class Weapon : BaseWeapon, IUse
 		StartReloadEffects();
 	}
 
-	public override void Simulate(Client owner)
+	public override void Simulate(IClient owner)
 	{
 		if (TimeSinceDeployed < 0.6f)
 			return;

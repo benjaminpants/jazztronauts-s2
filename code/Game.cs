@@ -6,7 +6,7 @@ using Sandbox;
 
 namespace Jazztronauts;
 
-public class JazztronautsGame : Game
+public class JazztronautsGame : GameManager
 {
 	private MainHUD _mainHud;
 	private IList<JazzPlayer> _players = new List<JazzPlayer>();
@@ -58,7 +58,7 @@ public class JazztronautsGame : Game
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
 	/// 
-	public override void ClientJoined(Client client)
+	public override void ClientJoined(IClient client)
 	{
 		base.ClientJoined(client);
 
@@ -71,7 +71,7 @@ public class JazztronautsGame : Game
 		player.Respawn();
 	}
 
-	public override void ClientDisconnect(Client client, NetworkDisconnectionReason reason)
+	public override void ClientDisconnect(IClient client, NetworkDisconnectionReason reason)
 	{
 		base.ClientDisconnect(client, reason);
 
@@ -83,7 +83,7 @@ public class JazztronautsGame : Game
 	}
 
 	// TODO: Make this. Not stupid, AKA figure out if theres a function for calling stuff when the map loads.
-	public override void Simulate(Client cl)
+	public override void Simulate(IClient cl)
 	{
 		base.Simulate(cl);
 

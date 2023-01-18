@@ -24,7 +24,7 @@ public static class JazzHelpers
 		{
 			Type = Package.Type.Map,
 			Order = Package.Order.User,
-			Take = 99,
+			Take = 128,
 		};
 
 		var packages = await query.RunAsync(default);

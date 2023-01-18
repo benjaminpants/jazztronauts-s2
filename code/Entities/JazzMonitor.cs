@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
 using Jazztronauts.Weapons;
-using SandboxEditor;
 
 namespace Jazztronauts.Entities //TODO: work on this
 {
 
 	[Spawnable]
-	[HammerEntity]
 	[EditorModel("models/light_arrow.vmdl")]
 	[Library("jazz_monitor", Title = nameof(JazzMonitor))]
 	public partial class JazzMonitor : ModelEntity, IUse

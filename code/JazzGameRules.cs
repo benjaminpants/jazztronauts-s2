@@ -1,11 +1,9 @@
 ﻿using System;
 using Sandbox;
-using SandboxEditor;
 
 namespace Jazztronauts
 {
 	[Spawnable]
-	[HammerEntity]
 	[Library("jazz_gamerules", Title = nameof(JazzGameRules))]
 	public class JazzGameRules : Entity
 	{

@@ -43,7 +43,7 @@ public partial class JazzPlayer : Player
 		Inventory = new Inventory(this);
 	}
 
-	public JazzPlayer(Client cl) : this()
+	public JazzPlayer(IClient cl) : this()
 	{
 		// Load clothing from client data
 		Clothing.LoadFromClient(cl);
@@ -60,7 +60,7 @@ public partial class JazzPlayer : Player
 		Log.Info(_playerData);
 	}
 
-	public override void OnClientActive(Client client)
+	public override void OnClientActive(IClient client)
 	{
 		base.OnClientActive(client);
 		if (IsServer)
@@ -194,7 +194,7 @@ public partial class JazzPlayer : Player
 		return Velocity.WithZ(0).Length.LerpInverse(0.0f, 200.0f) * 5.0f;
 	}
 
-	public override void Simulate(Client cl)
+	public override void Simulate(IClient cl)
 	{
 		base.Simulate(cl);
 

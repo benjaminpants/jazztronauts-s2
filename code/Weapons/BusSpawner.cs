@@ -26,7 +26,7 @@ public class BusSpawner : Weapon
 		return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);
 	}
 
-	public override void Simulate(Client owner)
+	public override void Simulate(IClient owner)
 	{
 		base.Simulate(owner);
 

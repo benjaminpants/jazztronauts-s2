@@ -3,12 +3,9 @@ using Sandbox;
 using System.Collections.Generic;
 using System.Linq;
 using Jazztronauts.Data;
-using SandboxEditor;
-
 namespace Jazztronauts.Entities
 {
 	[Spawnable]
-	[HammerEntity]
 	[EditorModel("models/arrow.vmdl")]
 	[Library("point_propdropper", Title = nameof(PropDropper))]
 	public partial class PropDropper : Entity
